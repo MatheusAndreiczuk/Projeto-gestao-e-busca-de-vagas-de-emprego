@@ -1,14 +1,12 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { readDB } = require('../db'); // <-- MUDOU AQUI
+const { readDB } = require('../db'); 
 
 exports.login = async (req, res) => {
     const { username, password } = req.body;
     
-    // 1. Lê os dados mais recentes do banco
     const db = readDB();
 
-    // 2. Procura o usuário no banco de dados
     const user = db.users.find(u => u.username === username);
 
     if (!user || !await bcrypt.compare(password, user.password)) {

@@ -1,4 +1,3 @@
-// src/validators/userValidator.js
 const { body } = require('express-validator');
 
 const validateUserCreation = [
@@ -6,7 +5,6 @@ const validateUserCreation = [
   body('username').isString().isLength({ min: 3, max: 20 }).withMessage('Username must be between 3 and 20 characters')
     .matches(/^[a-zA-Z0-9]+$/).withMessage('Username must not contain special characters or spaces'),
   
-  // LINHA CORRIGIDA ABAIXO
   body('password').isString().isLength({ min: 3, max: 20 }).withMessage('Password must be between 3 and 20 characters')
     .matches(/^\S*$/).withMessage('Password must not contain spaces'),
   
@@ -19,7 +17,6 @@ const validateUserCreation = [
 const validateUserUpdate = [
   body('name').optional().isString().isLength({ min: 4, max: 150 }),
 
-  // LINHA CORRIGIDA ABAIXO
   body('password').optional().isString().isLength({ min: 3, max: 20 })
     .matches(/^\S*$/).withMessage('Password must not contain spaces'),
 

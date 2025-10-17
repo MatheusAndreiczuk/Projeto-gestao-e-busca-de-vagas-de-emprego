@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
-const { readDB, writeDB } = require('../db'); // <-- MUDOU AQUI
+const { readDB, writeDB } = require('../db'); 
 
 const formatValidationErrors = (errors) => {
     return {
@@ -16,7 +16,6 @@ exports.register = async (req, res) => {
         return res.status(422).json(formatValidationErrors(errors));
     }
 
-    // 1. Lê o estado atual do banco de dados
     const db = readDB();
 
     const { name, username, password, email, phone, experience, education } = req.body;
@@ -37,10 +36,8 @@ exports.register = async (req, res) => {
         education: education || null
     };
 
-    // 2. Adiciona o novo usuário aos dados
     db.users.push(newUser);
 
-    // 3. Escreve os dados atualizados de volta no arquivo
     writeDB(db);
 
     res.status(201).json({ message: 'Created' });
@@ -66,18 +63,15 @@ exports.getById = (req, res) => {
 };
 
 exports.update = async (req, res) => {
-    // 1. Validação de entrada primeiro
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json(formatValidationErrors(errors));
     }
     
-    // 2. Lê o banco de dados
     const db = readDB();
     const requestedUserId = req.params.user_id;
     const authenticatedUserId = req.user.id;
 
-    // 3. Checagens de permissão
     if (requestedUserId !== authenticatedUserId) {
         return res.status(403).json({ message: 'Forbidden' });
     }
@@ -91,8 +85,6 @@ exports.update = async (req, res) => {
     const user = db.users[userIndex];
     const updates = req.body;
 
-    // 4. Lógica de atualização explícita para cada campo
-    // Usar 'in' verifica se a propriedade existe no objeto, mesmo que o valor seja ""
     if ('name' in updates) user.name = updates.name.toUpperCase();
     if ('email' in updates) user.email = updates.email || null;
     if ('phone' in updates) user.phone = updates.phone || null;
@@ -103,7 +95,6 @@ exports.update = async (req, res) => {
         user.password = await bcrypt.hash(updates.password, 10);
     }
     
-    // 5. Salva as alterações
     db.users[userIndex] = user;
     writeDB(db);
 
@@ -124,7 +115,6 @@ exports.delete = (req, res) => {
         return res.status(404).json({ message: 'User not found' });
     }
 
-    // Filtra o array para remover o usuário
     db.users = db.users.filter(u => u.id !== requestedUserId);
     writeDB(db);
 
