@@ -15,14 +15,12 @@ function App() {
       <Navbar />
       <main>
         <Routes>
-          {/* Rota raiz agora é o Login */}
           <Route path="/" element={<LoginPage />} /> 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/cadastro" element={<RegisterPage />} />
 
-          {/* Rotas Protegidas */}
           <Route
-            path="/dashboard" // Rota para a página inicial após o login
+            path="/dashboard" 
             element={
               <ProtectedRoute>
                 <HomePage />

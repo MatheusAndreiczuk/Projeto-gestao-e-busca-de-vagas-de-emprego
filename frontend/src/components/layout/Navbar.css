@@ -1,4 +1,3 @@
-/* src/components/layout/Navbar.css */
 .navbar {
   background: #232a34;
   height: 80px;
@@ -40,8 +39,8 @@
 
 .nav-item {
   height: 80px;
-  display: flex;         /* <-- ADICIONE ESTA LINHA */
-  align-items: center;   /* <-- ADICIONE ESTA LINHA */
+  display: flex;         
+  align-items: center;   
 }
 
 .nav-links {

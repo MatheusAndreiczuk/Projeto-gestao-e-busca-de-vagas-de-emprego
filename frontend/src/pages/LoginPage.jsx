@@ -1,12 +1,11 @@
-// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext'; // <-- NOSSO HOOK DE AUTENTICAÇÃO
-import './forms.css'; // <-- NOSSO CSS REUTILIZÁVEL
+import { useAuth } from '../contexts/AuthContext'; 
+import './forms.css'; 
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuth(); // <-- PEGANDO A FUNÇÃO LOGIN DO CONTEXTO
+  const { login } = useAuth(); 
 
   const [formData, setFormData] = useState({
     username: '',
@@ -29,11 +28,10 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      // Chama a função login do contexto, que cuida da chamada à API e de salvar o token
       await login(formData.username, formData.password);
       
       alert('Login bem-sucedido!');
-      navigate('/dashboard'); // Redireciona para a página inicial após o login
+      navigate('/dashboard'); 
 
     } catch (err) {
       setError('Usuário ou senha inválidos.');

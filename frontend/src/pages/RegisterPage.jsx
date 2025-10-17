@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Para redirecionar o usuário após o sucesso
-import apiClient from '../api/axios'; // Nosso cliente Axios pré-configurado
-import './RegisterPage.css'; // Um arquivo de CSS para estilização básica
+import { useNavigate } from 'react-router-dom'; 
+import apiClient from '../api/axios'; 
+import './RegisterPage.css'; 
 
 const RegisterPage = () => {
-  const navigate = useNavigate(); // Hook para navegação
+  const navigate = useNavigate(); 
 
-  // Estado para armazenar todos os dados do formulário em um único objeto
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -17,11 +16,9 @@ const RegisterPage = () => {
     education: '',
   });
 
-  // Estados para feedback ao usuário
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Função para lidar com a mudança em qualquer campo do formulário
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -30,14 +27,11 @@ const RegisterPage = () => {
     }));
   };
 
-  // Função para lidar com o envio do formulário
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Previne o comportamento padrão de recarregar a página
-    setError(null); // Limpa erros anteriores
-    setIsLoading(true); // Indica que a requisição está em andamento
+    e.preventDefault(); 
+    setError(null); 
+    setIsLoading(true); 
 
-    // O protocolo diz que email, phone, etc., são opcionais.
-    // Se um campo opcional não for preenchido, não o enviamos.
     const payload = {
         name: formData.name,
         username: formData.username,
@@ -51,28 +45,22 @@ const RegisterPage = () => {
 
 
     try {
-      // Fazendo a chamada POST para o endpoint /users com os dados do formulário
       const response = await apiClient.post('/users', payload);
 
-      // Se a requisição for bem-sucedida (status 201)
       console.log('Usuário cadastrado:', response.data);
       alert('Cadastro realizado com sucesso! Você será redirecionado para o login.');
-      navigate('/login'); // Redireciona para a página de login
+      navigate('/login'); 
 
     } catch (err) {
-      // Se o backend retornar um erro
       console.error("Erro no cadastro:", err);
 
-      // Axios coloca a resposta de erro em 'err.response'
       if (err.response && err.response.data && err.response.data.message) {
-        // Pega a mensagem de erro específica do nosso backend (ex: "Username already exists")
         setError(err.response.data.message);
       } else {
-        // Erro genérico
         setError('Ocorreu um erro ao tentar cadastrar. Tente novamente.');
       }
     } finally {
-      setIsLoading(false); // Finaliza o estado de carregamento
+      setIsLoading(false); 
     }
   };
 
@@ -81,7 +69,6 @@ const RegisterPage = () => {
       <form onSubmit={handleSubmit} className="register-form">
         <h2>Crie sua Conta</h2>
         
-        {/* Campo Nome (Obrigatório) */}
         <div className="form-group">
           <label htmlFor="name">Nome Completo</label>
           <input
@@ -95,7 +82,6 @@ const RegisterPage = () => {
           />
         </div>
 
-        {/* Campo Username (Obrigatório) */}
         <div className="form-group">
           <label htmlFor="username">Nome de Usuário</label>
           <input
@@ -109,7 +95,6 @@ const RegisterPage = () => {
           />
         </div>
 
-        {/* Campo Senha (Obrigatório) */}
         <div className="form-group">
           <label htmlFor="password">Senha</label>
           <input
@@ -123,7 +108,6 @@ const RegisterPage = () => {
           />
         </div>
 
-        {/* Campo Email (Opcional) */}
         <div className="form-group">
           <label htmlFor="email">Email (Opcional)</label>
           <input
@@ -135,7 +119,6 @@ const RegisterPage = () => {
           />
         </div>
 
-        {/* Campo Telefone (Opcional) */}
         <div className="form-group">
           <label htmlFor="phone">Telefone (Opcional)</label>
           <input
@@ -147,7 +130,6 @@ const RegisterPage = () => {
           />
         </div>
 
-        {/* Campo Experiência (Opcional) */}
         <div className="form-group">
           <label htmlFor="experience">Experiência (Opcional)</label>
           <textarea
@@ -158,7 +140,6 @@ const RegisterPage = () => {
           />
         </div>
 
-        {/* Campo Educação (Opcional) */}
         <div className="form-group">
           <label htmlFor="education">Educação (Opcional)</label>
           <textarea
@@ -169,7 +150,6 @@ const RegisterPage = () => {
           />
         </div>
 
-        {/* Exibição de mensagem de erro */}
         {error && <p className="error-message">{error}</p>}
 
         <button type="submit" disabled={isLoading}>

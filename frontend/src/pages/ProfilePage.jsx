@@ -1,9 +1,8 @@
-// src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import apiClient from '../api/axios';
-import './ProfilePage.css'; // Usaremos o mesmo CSS e adicionaremos novos estilos
+import './ProfilePage.css';
 
 const parseJwt = (token) => {
   try {
@@ -18,17 +17,15 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState(null);
-  const [editData, setEditData] = useState({}); // Estado para os dados do formulário de edição
-  const [isEditing, setIsEditing] = useState(false); // Controla o modo de edição
+  const [editData, setEditData] = useState({});
+  const [isEditing, setIsEditing] = useState(false); 
   
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null); // Para mensagens de sucesso
+  const [success, setSuccess] = useState(null); 
 
-  // Efeito para buscar os dados do usuário ao carregar a página
   useEffect(() => {
     const fetchUserData = async () => {
-      // ... (código de busca de dados permanece o mesmo)
       const decodedToken = parseJwt(token);
       if (!decodedToken || !decodedToken.sub) {
         setError("Token inválido.");
@@ -40,7 +37,7 @@ const ProfilePage = () => {
       try {
         const response = await apiClient.get(`/users/${userId}`);
         setUserData(response.data);
-        setEditData(response.data); // Preenche o formulário de edição com os dados atuais
+        setEditData(response.data); 
       } catch (err) {
         setError("Não foi possível carregar os dados do perfil.");
       } finally {
@@ -50,7 +47,6 @@ const ProfilePage = () => {
     fetchUserData();
   }, [token]);
 
-  // Função para lidar com a mudança nos campos do formulário de edição
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditData(prevState => ({
@@ -59,12 +55,19 @@ const ProfilePage = () => {
     }));
   };
 
-  // Função para salvar as alterações (UPDATE)
   const handleUpdate = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
     setSuccess(null);
+
+    const decodedToken = parseJwt(token);
+    if (!decodedToken || !decodedToken.sub) {
+      setError("Sessão inválida. Por favor, faça login novamente.");
+      setIsLoading(false);
+      return;
+    }
+    const userId = decodedToken.sub;
 
     const payload = {
       name: editData.name,
@@ -78,26 +81,21 @@ const ProfilePage = () => {
     }
 
     try {
-      await apiClient.put(`/users/${userData.id}`, payload);
-      // Recarrega os dados do usuário para garantir consistência
-      const response = await apiClient.get(`/users/${userData.id}`);
+      await apiClient.patch(`/users/${userId}`, payload);
+      const response = await apiClient.get(`/users/${userId}`);
       setUserData(response.data);
       setEditData(response.data);
 
       setIsEditing(false);
       setSuccess("Perfil atualizado com sucesso!");
     } catch (err) {
-      console.error("Erro ao atualizar:", err.response); // Log completo do erro no console
+      console.error("Erro ao atualizar:", err.response); 
 
-      // LÓGICA DE ERRO APRIMORADA
       if (err.response && err.response.status === 422) {
-        // Se for um erro de validação (422)
         const errorDetails = err.response.data.details;
         const firstError = errorDetails[0];
-        // Cria uma mensagem de erro mais específica
         setError(`Erro de validação no campo '${firstError.field}': ${firstError.error}`);
       } else {
-        // Para outros tipos de erro
         setError("Falha ao atualizar o perfil. Verifique os dados e a conexão.");
       }
     } finally {
@@ -105,17 +103,22 @@ const ProfilePage = () => {
     }
   };
 
-  // Função para deletar a conta (DELETE)
   const handleDelete = async () => {
-    // Pedido de confirmação é crucial para uma ação destrutiva
+     const decodedToken = parseJwt(token);
+    if (!decodedToken || !decodedToken.sub) {
+      setError("Sessão inválida. Por favor, faça login novamente.");
+      setIsLoading(false);
+      return;
+    }
+    const userId = decodedToken.sub;
     if (window.confirm("Você tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.")) {
       setIsLoading(true);
       setError(null);
       try {
-        await apiClient.delete(`/users/${userData.id}`);
+        await apiClient.delete(`/users/${userId}`);
         alert("Conta excluída com sucesso.");
-        logout(); // Limpa o contexto de autenticação
-        navigate('/login'); // Redireciona para o login
+        logout(); 
+        navigate('/login'); 
       } catch (err) {
         setError("Não foi possível excluir a conta.");
         setIsLoading(false);
@@ -123,12 +126,10 @@ const ProfilePage = () => {
     }
   };
 
-  // Renderização condicional enquanto os dados carregam
   if (isLoading && !userData) {
     return <div>Carregando perfil...</div>;
   }
 
-  // Renderização de erro
   if (error && !isEditing) {
     return <div className="error-message">{error}</div>;
   }
@@ -140,7 +141,6 @@ const ProfilePage = () => {
         {success && <p className="success-message">{success}</p>}
 
         {isEditing ? (
-          // MODO DE EDIÇÃO: Formulário
           <form onSubmit={handleUpdate} className="profile-form">
             <div className="form-group">
               <label>Nome Completo</label>
@@ -179,7 +179,6 @@ const ProfilePage = () => {
             </div>
           </form>
         ) : (
-          // MODO DE VISUALIZAÇÃO: Dados do perfil
           <>
             <p><strong>Nome:</strong> {userData?.name}</p>
             <p><strong>Username:</strong> {userData?.username}</p>

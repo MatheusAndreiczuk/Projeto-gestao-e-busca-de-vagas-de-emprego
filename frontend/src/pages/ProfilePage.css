@@ -1,9 +1,7 @@
-/* Adicionar ao final de src/pages/ProfilePage.css */
-
 .profile-actions {
   display: flex;
-  justify-content: flex-end; /* Alinha os botões à direita */
-  gap: 10px; /* Espaço entre os botões */
+  justify-content: flex-end;
+  gap: 10px; 
   margin-top: 30px;
   border-top: 1px solid #eee;
   padding-top: 20px;
@@ -50,7 +48,6 @@
   background-color: #5a6268;
 }
 
-/* Estilos para o formulário de edição */
 .profile-form .form-group {
   margin-bottom: 15px;
 }
@@ -69,7 +66,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
-  box-sizing: border-box; /* Garante que padding não afete a largura total */
+  box-sizing: border-box;
 }
 
 .profile-form input:disabled {

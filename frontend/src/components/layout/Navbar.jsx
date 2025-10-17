@@ -1,4 +1,3 @@
-// src/components/layout/Navbar.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -10,19 +9,17 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login'); // Redireciona para o login após sair
+    navigate('/login'); 
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        {/* Lógica para o link do logo */}
         <Link to={isAuthenticated ? "/dashboard" : "/"} className="navbar-logo">
           JobPortal
         </Link>
         <ul className="nav-menu">
           <li className="nav-item">
-            {/* Lógica para o link de início */}
             <Link to={isAuthenticated ? "/dashboard" : "/"} className="nav-links">
               Início
             </Link>
