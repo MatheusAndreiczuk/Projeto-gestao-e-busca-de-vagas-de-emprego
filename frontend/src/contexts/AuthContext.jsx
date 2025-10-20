@@ -33,9 +33,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
+  const logout = async () => {
+    try {
+      await apiClient.post('/logout');
+    } catch (error) {
+      console.error("Falha no logout no servidor", error);
+    } finally {
+      setUser(null);
+      setToken(null);
+    }
   };
 
   const value = {

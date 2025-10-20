@@ -11,8 +11,8 @@ app.use(express.json());
 
 app.use('/', mainRouter);
 
-const PORT = 3000;
-const HOST = '26.251.12.32'; 
+const PORT = 22000;
+const HOST = '0.0.0.0'; 
 
 app.listen(PORT, HOST, () => { 
   console.log(`Servidor rodando em http://${HOST}:${PORT}`);

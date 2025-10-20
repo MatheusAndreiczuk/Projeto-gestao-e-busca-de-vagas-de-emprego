@@ -117,7 +117,6 @@ const ProfilePage = () => {
       try {
         await apiClient.delete(`/users/${userId}`);
         alert("Conta excluída com sucesso.");
-        logout(); 
         navigate('/login'); 
       } catch (err) {
         setError("Não foi possível excluir a conta.");
@@ -151,8 +150,18 @@ const ProfilePage = () => {
                 <input type="text" value={userData.username || ''} disabled title="O nome de usuário não pode ser alterado." />
             </div>
             <div className="form-group">
-              <label>Nova Senha (deixe em branco para não alterar)</label>
-              <input type="password" name="newPassword" onChange={handleChange} />
+              <label>Nova Senha</label>
+              <input 
+                type="password" 
+                name="newPassword" 
+                value={editData.newPassword || ''} 
+                onChange={handleChange} 
+                required 
+                minLength="3"
+                maxLength="20"
+                pattern="^\S*$"
+                title="A senha deve ter entre 3 e 20 caracteres e não pode conter espaços"
+              />
             </div>
             <div className="form-group">
               <label>Email</label>

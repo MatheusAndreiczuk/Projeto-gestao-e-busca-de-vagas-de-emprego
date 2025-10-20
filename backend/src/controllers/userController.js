@@ -6,7 +6,7 @@ const formatValidationErrors = (errors) => {
     return {
         message: "Validation error",
         code: "UNPROCESSABLE",
-        details: errors.array().map(err => ({ field: err.param, error: err.msg }))
+        details: errors.array().map(err => ({ field: err.path, error: err.msg }))
     };
 };
 
@@ -58,7 +58,8 @@ exports.getById = (req, res) => {
         return res.status(404).json({ message: 'User not found' });
     }
     
-    const { password, ...userData } = user;
+    delete user.password;
+    const {...userData } = user;
     res.status(200).json(userData);
 };
 
@@ -98,7 +99,7 @@ exports.update = async (req, res) => {
     db.users[userIndex] = user;
     writeDB(db);
 
-    res.status(200).json({ message: "Updated" });
+    res.status(200).json();
 };
 
 exports.delete = (req, res) => {
