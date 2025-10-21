@@ -117,6 +117,7 @@ const ProfilePage = () => {
       try {
         await apiClient.delete(`/users/${userId}`);
         alert("Conta excluída com sucesso.");
+        logout();
         navigate('/login'); 
       } catch (err) {
         setError("Não foi possível excluir a conta.");
@@ -169,7 +170,17 @@ const ProfilePage = () => {
             </div>
             <div className="form-group">
               <label>Telefone</label>
-              <input type="tel" name="phone" value={editData.phone || ''} onChange={handleChange} />
+              <input 
+                type="tel" 
+                name="phone" 
+                value={editData.phone || ''} 
+                onChange={handleChange} 
+                inputMode="numeric"
+                pattern="^\\d{10,14}$"
+                minLength="10"
+                maxLength="14"
+                title="Informe apenas números (10 a 14 dígitos)"
+              />
             </div>
             <div className="form-group">
               <label>Educação</label>

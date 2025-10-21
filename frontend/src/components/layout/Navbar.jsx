@@ -16,7 +16,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to={isAuthenticated ? "/dashboard" : "/"} className="navbar-logo">
-          JobPortal
+          Portal Cliente-Servidor de empregos
         </Link>
         <ul className="nav-menu">
           <li className="nav-item">

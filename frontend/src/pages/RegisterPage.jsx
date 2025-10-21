@@ -127,6 +127,11 @@ const RegisterPage = () => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
+            inputMode="numeric"
+            pattern="^\\d{10,14}$"
+            minLength="10"
+            maxLength="14"
+            title="Informe apenas números (10 a 14 dígitos)"
           />
         </div>
 

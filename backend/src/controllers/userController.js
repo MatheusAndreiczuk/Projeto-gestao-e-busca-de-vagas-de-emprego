@@ -12,6 +12,7 @@ const formatValidationErrors = (errors) => {
 
 exports.register = async (req, res) => {
     const errors = validationResult(req);
+    console.log(errors);
     if (!errors.isEmpty()) {
         return res.status(422).json(formatValidationErrors(errors));
     }
@@ -19,6 +20,7 @@ exports.register = async (req, res) => {
     const db = readDB();
 
     const { name, username, password, email, phone, experience, education } = req.body;
+    
 
     if (db.users.find(u => u.username === username)) {
         return res.status(409).json({ message: 'Username already exists' });
@@ -30,10 +32,10 @@ exports.register = async (req, res) => {
         name: name.toUpperCase(),
         username,
         password: hashedPassword,
-        email: email || null,
-        phone: phone || null,
-        experience: experience || null,
-        education: education || null
+        email: (email && email.trim() !== "") ? email : null,
+        phone: (phone && phone.trim() !== "") ? phone : null,
+        experience: (experience && experience.trim() !== "") ? experience : null,
+        education: (education && education.trim() !== "") ? education : null
     };
 
     db.users.push(newUser);
@@ -59,6 +61,7 @@ exports.getById = (req, res) => {
     }
     
     delete user.password;
+    delete user.id;
     const {...userData } = user;
     res.status(200).json(userData);
 };

@@ -8,10 +8,13 @@ const validateUserCreation = [
   body('password').isString().isLength({ min: 3, max: 20 }).withMessage('Password must be between 3 and 20 characters')
     .matches(/^\S*$/).withMessage('Password must not contain spaces'),
   
-  body('email').optional().isEmail().withMessage('Must be a valid email address'),
-  body('phone').optional().isNumeric().isLength({ min: 10, max: 14 }).withMessage('Phone must be between 10 and 14 digits'),
-  body('experience').optional().isString().isLength({ min: 10, max: 600 }),
-  body('education').optional().isString().isLength({ min: 10, max: 600 }),
+  body('email').optional({ checkFalsy: true }).isEmail().withMessage('Must be a valid email address'),
+  body('phone')
+    .optional({ checkFalsy: true })
+    .matches(/^\d{10,14}$/)
+    .withMessage('Phone must contain only digits and be between 10 and 14 digits'),
+  body('experience').optional({ checkFalsy: true }).isString().isLength({ min: 10, max: 600 }),
+  body('education').optional({ checkFalsy: true }).isString().isLength({ min: 10, max: 600 }),
 ];
 
 const validateUserUpdate = [
@@ -21,7 +24,10 @@ const validateUserUpdate = [
     .matches(/^\S*$/).withMessage('Password must not contain spaces'),
 
   body('email').optional({ checkFalsy: true }).isEmail(),
-  body('phone').optional({ checkFalsy: true }).isString().isLength({ min: 10, max: 14 }),
+  body('phone')
+    .optional({ checkFalsy: true })
+    .matches(/^\d{10,14}$/)
+    .withMessage('Phone must contain only digits and be between 10 and 14 digits'),
   body('experience').optional({ checkFalsy: true }).isString().isLength({ min: 10, max: 600 }),
   body('education').optional({ checkFalsy: true }).isString().isLength({ min: 10, max: 600 }),
 ];

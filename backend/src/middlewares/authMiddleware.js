@@ -3,26 +3,15 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Invalid credentials' }); 
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Invalid Token' });
   }
 
-  const parts = authHeader.split(' ');
-  if (parts.length !== 2) {
-    return res.status(401).json({ message: 'Invalid credentials' }); 
-  }
-  
-  const [scheme, token] = parts;
-  if (!/^Bearer$/i.test(scheme)) {
-    return res.status(401).json({ message: 'Invalid credentials' }); 
-  }
+  const token = authHeader.split(' ')[1];
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      if (err.name === 'TokenExpiredError') {
-          return res.status(401).json({ message: 'Token expired' });
-      }
-      return res.status(401).json({ message: 'Invalid credentials' }); 
+      return res.status(401).json({ message: 'Invalid Token' });
     }
 
     req.user = {
