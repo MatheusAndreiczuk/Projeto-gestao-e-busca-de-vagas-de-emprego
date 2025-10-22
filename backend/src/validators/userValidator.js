@@ -5,8 +5,11 @@ const validateUserCreation = [
   body('username').isString().isLength({ min: 3, max: 20 }).withMessage('Username must be between 3 and 20 characters')
     .matches(/^[a-zA-Z0-9_.-]+$/).withMessage('Username must not contain special characters or spaces'),
   
-  body('password').isString().isLength({ min: 3, max: 20 }).withMessage('Password must be between 3 and 20 characters')
-    .matches(/^\S*$/).withMessage('Password must not contain spaces'),
+  body('password')
+    .isString()
+    .isLength({ min: 3, max: 20 }).withMessage('Password must be between 3 and 20 characters')
+    .matches(/^[a-zA-Z0-9_.-]+$/)
+    .withMessage('Password must not contain special characters or spaces'),
   
   body('email').optional({ checkFalsy: true }).isEmail().withMessage('Must be a valid email address'),
   body('phone')
@@ -20,8 +23,11 @@ const validateUserCreation = [
 const validateUserUpdate = [
   body('name').optional().isString().isLength({ min: 4, max: 150 }),
 
-  body('password').optional().isString().isLength({ min: 3, max: 20 })
-    .matches(/^\S*$/).withMessage('Password must not contain spaces'),
+  body('password')
+    .isString()
+    .isLength({ min: 3, max: 20 })
+    .matches(/^[a-zA-Z0-9_.-]+$/)
+    .withMessage('Password must not contain special characters or spaces'),
 
   body('email').optional({ checkFalsy: true }).isEmail(),
   body('phone')

@@ -160,8 +160,8 @@ const ProfilePage = () => {
                 required 
                 minLength="3"
                 maxLength="20"
-                pattern="^\S*$"
-                title="A senha deve ter entre 3 e 20 caracteres e não pode conter espaços"
+                pattern="[a-zA-Z0-9_.\\-]{3,20}"
+                title="A senha deve ter entre 3 e 20 caracteres e não pode conter espaços ou caracteres especiais (permitidos: letras, números, _, ., -)"
               />
             </div>
             <div className="form-group">
@@ -176,9 +176,6 @@ const ProfilePage = () => {
                 value={editData.phone || ''} 
                 onChange={handleChange} 
                 inputMode="numeric"
-                pattern="^\\d{10,14}$"
-                minLength="10"
-                maxLength="14"
                 title="Informe apenas números (10 a 14 dígitos)"
               />
             </div>
